@@ -92,42 +92,31 @@ limitations under the License.
         // handler for the CastMessageBus message event
         window.messageBus.onMessage = function(event) {
           if(!players[event.senderId]) {
-            var faces = ["😆", "😘", "🧐", "😭", "😬", "😪"];
+            var faces = ["😆", "😘", "🤔", "😭", "😬", "😖"];
             players[event.senderId] = {
               id: Object.keys(players).length,
               loc: defaultPlayerLoc,
               element: $('<span id="player-' + players[event.senderId].id + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>')
             };
             $("div").append(players[event.senderId].element);
-            displayText('Creating new player at ' + defaultPlayerLoc.left + ', ' + defaultPlayerLoc.top);
             movePlayer(players[event.senderId]);
           }
 
-          displayText('About to switch');
           var player = players[event.senderId];
           switch(event.data) {
             case "37":
-              displayText("Switching now!");
               player.loc.left = player.loc.left - 10;
-              displayText("Going left!");
               break;
             case "38":
-              displayText("Switching now!");
               player.loc.top = player.loc.top - 10;
-              displayText("Going up!");
               break;
             case "39":
-              displayText("Switching now!");
               player.loc.left = player.loc.left + 10;
-              displayText("Going right!");
               break;
             case "40":
-              displayText("Switching now!");
               player.loc.top = player.loc.top + 10;
-              displayText("Going down!");
               break;
           }
-          displayText('About to move the player with ' + player.id + ' and ' + player.loc.toString());
           movePlayer(player);
           // displayText(event.data);
           // inform all senders on the CastMessageBus of the incoming message event
@@ -137,13 +126,11 @@ limitations under the License.
 
         // initialize the CastReceiverManager with an application status message
         window.castReceiverManager.start({statusText: 'Application is starting'});
-        console.log('Receiver Manager started');
       });
 
       function movePlayer(player) {
         var id = player.id;
         var loc = player.loc;
-        displayText('moving id: ' + id);
         player.element.css(loc);
       }
 
