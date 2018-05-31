@@ -92,12 +92,13 @@ limitations under the License.
         // handler for the CastMessageBus message event
         window.messageBus.onMessage = function(event) {
           if(!players[event.senderId]) {
+            var faces = ["😆", "😘", "🧐", "😭", "😬", "😪"];
             players[event.senderId] = {
               id: Object.keys(players).length,
-              loc: defaultPlayerLoc
+              loc: defaultPlayerLoc,
+              element: $('<span id="player-' + players[event.senderId].id + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>')
             };
-            var faces = ["😆", "😘", "🧐", "😭", "😬", "😪"];
-            $("div").append('<span id="player-' + players[event.senderId].id + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>');
+            $("div").append(players[event.senderId].element);
             displayText('Creating new player at ' + defaultPlayerLoc.left + ', ' + defaultPlayerLoc.top);
             movePlayer(players[event.senderId]);
           }
@@ -143,11 +144,12 @@ limitations under the License.
         var id = player.id;
         var loc = player.loc;
         displayText('moving id: ' + id);
-        $("#player-" + id).css(loc);
+        player.element.css(loc);
       }
 
+      var h1 = $('h1');
       function displayText(text) {
-        $('h1').text(text);
+        h1.text(text);
         window.castReceiverManager.setApplicationState(text);
       };
     </script>
