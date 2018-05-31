@@ -93,10 +93,11 @@ limitations under the License.
         window.messageBus.onMessage = function(event) {
           if(!players[event.senderId]) {
             var faces = ["😆", "😘", "🤔", "😭", "😬", "😖"];
+            var newId = Object.keys(players).length;
             players[event.senderId] = {
-              id: Object.keys(players).length,
+              id: newId,
               loc: defaultPlayerLoc,
-              element: $('<span id="player-' + players[event.senderId].id + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>')
+              element: $('<span id="player-' + newId + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>')
             };
             $("div").append(players[event.senderId].element);
             movePlayer(players[event.senderId]);
