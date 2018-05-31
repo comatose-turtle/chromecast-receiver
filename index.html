@@ -91,16 +91,16 @@ limitations under the License.
           // display the message from the sender
           switch(event.data) {
             case "37":
-              playerLeft--;
+              playerLeft-=10;
               break;
             case "38":
-              playerTop--;
+              playerTop-=10;
               break;
             case "39":
-              playerLeft++;
+              playerLeft+=10;
               break;
             case "40":
-              playerTop++;
+              playerTop+=10;
               break;
           }
           movePlayer();
