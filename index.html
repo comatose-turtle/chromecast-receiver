@@ -95,22 +95,22 @@ limitations under the License.
               top: playerTop
             };
             var faces = ["😆", "😘", "🧐", "😭", "😬", "😪"];
-            $("div").append('<span id="player-' + event.senderId + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>');
+            $("div").append('<span id="player-' + event.senderId + '">' + faces[Math.floor(Math.random()*faces.length)] + ' ' + event.senderId + '</span>');
           }
 
           var playerLoc = players[event.senderId];
           switch(event.data) {
             case "37":
-              playerLoc.left-=10;
+              playerLoc.left = playerLoc.left - 10;
               break;
             case "38":
-              playerLoc.top-=10;
+              playerLoc.top = playerLoc.top - 10;
               break;
             case "39":
-              playerLoc.left+=10;
+              playerLoc.left = playerLoc.left + 10;
               break;
             case "40":
-              playerLoc.top+=10;
+              playerLoc.top = playerLoc.top + 10;
               break;
           }
           movePlayer(event.senderId, playerLoc);
