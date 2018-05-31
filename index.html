@@ -21,8 +21,11 @@ limitations under the License.
         overflow:hidden;
       }
       div{
-        height:720PX;
-        width:1280PX;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
         color:#000000;
         background-color:#FFFFFF;
         font-weight:bold;
@@ -41,12 +44,13 @@ limitations under the License.
     <title>Cast Test</title>
   </head>
   <body>
-    <div><span id="player">😆</span></div>
+    <div></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
     <script type="text/javascript">
       var playerLeft = 630;
       var playerTop = 350;
+      var players = {};
 
       $(function() {
         movePlayer();
@@ -87,23 +91,31 @@ limitations under the License.
 
         // handler for the CastMessageBus message event
         window.messageBus.onMessage = function(event) {
-          console.log('Message [' + event.senderId + ']: ' + event.data);
-          // display the message from the sender
+          if(!players[event.senderId]) {
+            players[event.senderId] = {
+              left: playerLeft,
+              top: playerTop
+            };
+            var faces = [😆, 😘, 🧐, 😭, 😬, 😪];
+            $("div").append('<span id="player-' + event.senderId + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>');
+          }
+
+          var playerLoc = players[event.senderId];
           switch(event.data) {
             case "37":
-              playerLeft-=10;
+              playerLoc.left-=10;
               break;
             case "38":
-              playerTop-=10;
+              playerLoc.top-=10;
               break;
             case "39":
-              playerLeft+=10;
+              playerLoc.left+=10;
               break;
             case "40":
-              playerTop+=10;
+              playerLoc.top+=10;
               break;
           }
-          movePlayer();
+          movePlayer(event.senderId, playerLoc);
           // displayText(event.data);
           // inform all senders on the CastMessageBus of the incoming message event
           // sender message listener will be invoked
@@ -115,11 +127,8 @@ limitations under the License.
         console.log('Receiver Manager started');
       });
 
-      function movePlayer() {
-        $("#player").css({
-          left: playerLeft,
-          top: playerTop
-        });
+      function movePlayer(id, loc) {
+        $("#player-" + id).css(loc);
       }
 
       // utility function to display the text message in the input field
