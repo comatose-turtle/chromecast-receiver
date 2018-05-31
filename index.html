@@ -32,6 +32,9 @@ limitations under the License.
         font-family:Verdana, Geneva, sans-serif;
         font-size:40px;
       }
+      h1 {
+        text-align: center;
+      }
       span {
         display:inline-block;
         position: absolute;
@@ -44,12 +47,11 @@ limitations under the License.
     <title>Cast Test</title>
   </head>
   <body>
-    <div></div>
+    <div><h1>Things and Things</h1></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
     <script type="text/javascript">
-      var playerLeft = 630;
-      var playerTop = 350;
+      var defaultPlayerLoc = { left: 630, top: 350 };
       var players = {};
 
       $(function() {
@@ -91,29 +93,41 @@ limitations under the License.
         window.messageBus.onMessage = function(event) {
           if(!players[event.senderId]) {
             players[event.senderId] = {
-              left: playerLeft,
-              top: playerTop
+              id: Object.keys(players).length,
+              loc: defaultPlayerLoc
             };
             var faces = ["😆", "😘", "🧐", "😭", "😬", "😪"];
-            $("div").append('<span id="player-' + event.senderId + '">' + faces[Math.floor(Math.random()*faces.length)] + ' ' + event.senderId + '</span>');
+            $("div").append('<span id="player-' + players[event.senderId].id + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>');
+            displayText('Creating new player at ' + defaultPlayerLoc.left + ', ' + defaultPlayerLoc.top);
+            movePlayer(players[event.senderId]);
           }
 
-          var playerLoc = players[event.senderId];
+          displayText('About to switch');
+          var player = players[event.senderId];
           switch(event.data) {
             case "37":
-              playerLoc.left = playerLoc.left - 10;
+              displayText("Switching now!");
+              player.loc.left = player.loc.left - 10;
+              displayText("Going left!");
               break;
             case "38":
-              playerLoc.top = playerLoc.top - 10;
+              displayText("Switching now!");
+              player.loc.top = player.loc.top - 10;
+              displayText("Going up!");
               break;
             case "39":
-              playerLoc.left = playerLoc.left + 10;
+              displayText("Switching now!");
+              player.loc.left = player.loc.left + 10;
+              displayText("Going right!");
               break;
             case "40":
-              playerLoc.top = playerLoc.top + 10;
+              displayText("Switching now!");
+              player.loc.top = player.loc.top + 10;
+              displayText("Going down!");
               break;
           }
-          movePlayer(event.senderId, playerLoc);
+          displayText('About to move the player with ' + player.id + ' and ' + player.loc.toString());
+          movePlayer(player);
           // displayText(event.data);
           // inform all senders on the CastMessageBus of the incoming message event
           // sender message listener will be invoked
@@ -125,14 +139,15 @@ limitations under the License.
         console.log('Receiver Manager started');
       });
 
-      function movePlayer(id, loc) {
+      function movePlayer(player) {
+        var id = player.id;
+        var loc = player.loc;
+        displayText('moving id: ' + id);
         $("#player-" + id).css(loc);
       }
 
-      // utility function to display the text message in the input field
       function displayText(text) {
-        console.log(text);
-        $('message').innerText = text;
+        $('h1').text(text);
         window.castReceiverManager.setApplicationState(text);
       };
     </script>
