@@ -47,7 +47,7 @@ limitations under the License.
     <script type="text/javascript">
       var playerLeft = 635;
       var playerTop = 355;
-      
+
       $(function() {
         movePlayer();
 
@@ -90,16 +90,16 @@ limitations under the License.
           console.log('Message [' + event.senderId + ']: ' + event.data);
           // display the message from the sender
           switch(event.data) {
-            case 37:
+            case "37":
               playerLeft--;
               break;
-            case 38:
+            case "38":
               playerTop--;
               break;
-            case 39:
+            case "39":
               playerLeft++;
               break;
-            case 40:
+            case "40":
               playerTop++;
               break;
           }
