@@ -23,27 +23,36 @@ limitations under the License.
       div{
         height:720PX;
         width:1280PX;
-        text-align:center;
-        border:0px solid silver;
-        display: table-cell;
-        vertical-align:middle;
         color:#000000;
         background-color:#FFFFFF;
         font-weight:bold;
         font-family:Verdana, Geneva, sans-serif;
         font-size:40px;
       }
+      span {
+        display:inline-block;
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        line-height: 10px;
+        font-size: 10px;
+      }
     </style>
-    <title>Cast Hello Text</title>
+    <title>Cast Test</title>
   </head>
   <body>
-  <div id="message">What is updog</div>
+    <div><span id="player">😆</span></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
     <script type="text/javascript">
-      window.onload = function() {
+      var playerLeft = 635;
+      var playerTop = 355;
+      
+      $(function() {
+        movePlayer();
+
         cast.receiver.logger.setLevelValue(0);
         window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-        console.log('Starting Receiver Manager');
 
         // handler for the 'ready' event
         castReceiverManager.onReady = function(event) {
@@ -80,7 +89,22 @@ limitations under the License.
         window.messageBus.onMessage = function(event) {
           console.log('Message [' + event.senderId + ']: ' + event.data);
           // display the message from the sender
-          displayText(event.data);
+          switch(event.data) {
+            case 37:
+              playerLeft--;
+              break;
+            case 38:
+              playerTop--;
+              break;
+            case 39:
+              playerLeft++;
+              break;
+            case 40:
+              playerTop++;
+              break;
+          }
+          movePlayer();
+          // displayText(event.data);
           // inform all senders on the CastMessageBus of the incoming message event
           // sender message listener will be invoked
           window.messageBus.send(event.senderId, event.data);
@@ -89,12 +113,19 @@ limitations under the License.
         // initialize the CastReceiverManager with an application status message
         window.castReceiverManager.start({statusText: 'Application is starting'});
         console.log('Receiver Manager started');
-      };
+      });
+
+      function movePlayer() {
+        $("#player").css({
+          left: playerLeft,
+          top: playerTop
+        });
+      }
 
       // utility function to display the text message in the input field
       function displayText(text) {
         console.log(text);
-        document.getElementById('message').innerText = text;
+        $('message').innerText = text;
         window.castReceiverManager.setApplicationState(text);
       };
     </script>
