@@ -96,7 +96,7 @@ limitations under the License.
             var newId = Object.keys(players).length;
             players[event.senderId] = {
               id: newId,
-              loc: defaultPlayerLoc,
+              loc: Object.assign({}, defaultPlayerLoc),
               element: $('<span id="player-' + newId + '">' + faces[Math.floor(Math.random()*faces.length)] + '</span>')
             };
             $("div").append(players[event.senderId].element);
